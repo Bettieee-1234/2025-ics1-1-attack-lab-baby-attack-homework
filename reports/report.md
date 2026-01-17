@@ -8,7 +8,7 @@
 
 
 ## Problem 1
-
+![alt text](image.png)
 ### 解题思路
 这道题比较基础，我先用 `objdump -d problem1` 看了下反汇编代码。
 问题出在 `func` 函数里，它调用了 `strcpy` 把我们的输入复制到栈上，但是完全没检查长度。这就给了我们覆盖栈帧的机会。
@@ -18,8 +18,6 @@
 
 ### Payload 设计
 ```python
-# 构造 payload 的脚本片段
-from struct import pack
 
 # 根据栈分析：Buffer(8) + Saved RBP(8) = 16 字节
 # 用 'A' 把这段空间填满，挤到 Return Address 的位置
@@ -44,6 +42,7 @@ Yes!I like ICS!
 ---
 
 ## Problem 2
+![alt text](image-1.png)
 
 ### 解题思路
 这道题乍一看跟第一题差不多，但是反汇编找不到直接调用的地方了。
@@ -84,7 +83,7 @@ Yes!I like ICS!
 ---
 
 ## Problem 3
-
+![alt text](image-2.png)
 ### 解题思路
 这题也没开 NX，理论上可以写 shellcode。
 只要调用 `func1(114)` 就能过。但是有个大问题：**ASLR (地址随机化)**。
@@ -135,7 +134,7 @@ Your lucky number is 114
 ---
 
 ## Problem 4
-
+![alt text](image-3.png)
 ### Canary 保护机制分析
 这题一上来就能看到 Stack Canary保护。
 汇编里不仅有从 `%fs:0x28` 取随机值放到栈里（`mov %fs:0x28, %rax ... mov %rax, -0x8(%rbp)`），函数退出前还有 `xor` 检查。
